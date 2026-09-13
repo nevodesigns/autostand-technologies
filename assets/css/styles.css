@@ -1,0 +1,515 @@
+/* ==========================================================================
+   AutoStand Technologies
+   --------------------------------------------------------------------------
+   Design rule followed throughout this file: colour is not a decoration.
+   The accent appears in four places on the whole page and nowhere else.
+   Hierarchy is carried by type scale, weight, rules and whitespace.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- 1. Tokens */
+:root{
+  /* Ground */
+  --ink-900:#0B0B0D;
+  --ink-850:#0F0F12;
+  --ink-800:#141418;
+  --ink-750:#191920;
+
+  /* Rules */
+  --rule:#23232B;
+  --rule-soft:#1A1A20;
+
+  /* Text */
+  --fg:#ECECEE;
+  --fg-2:#9C9CA6;
+  --fg-3:#63636D;
+
+  /* Accent — the single brand colour. Swap this one value. */
+  --accent:#E8232A;
+
+  /* Type */
+  --sans:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* Scale */
+  --t-hero:clamp(2.15rem,6.2vw,5.4rem);
+  --t-h2:clamp(1.9rem,3.6vw,3.1rem);
+  --t-h3:clamp(1.02rem,1.5vw,1.18rem);
+  --t-lede:clamp(1.02rem,1.5vw,1.2rem);
+  --t-body:clamp(.95rem,1.15vw,1.02rem);
+  --t-mono:.7rem;
+
+  /* Space */
+  --gut:clamp(1.25rem,5vw,4.5rem);
+  --sec-y:clamp(4.5rem,9vw,9rem);
+  --shell:1180px;
+}
+
+/* ----------------------------------------------------------- 2. Base */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+body{
+  background:var(--ink-900);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-size:var(--t-body);
+  line-height:1.62;
+  letter-spacing:-0.006em;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+ul,ol{ list-style:none; }
+
+::selection{ background:var(--fg); color:var(--ink-900); }
+
+:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0;
+  margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+.skip{
+  position:absolute; left:-9999px; top:0; z-index:999;
+  background:var(--fg); color:var(--ink-900);
+  padding:.7rem 1.1rem; font-size:.85rem; font-weight:600;
+}
+.skip:focus{ left:.75rem; top:.75rem; }
+
+.shell{
+  width:100%; max-width:var(--shell);
+  margin-inline:auto; padding-inline:var(--gut);
+}
+
+/* ----------------------------------------------------------- 3. Header */
+.site-head{
+  position:fixed; inset:0 0 auto 0; z-index:100;
+  background:color-mix(in srgb, var(--ink-900) 82%, transparent);
+  backdrop-filter:blur(16px) saturate(140%);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s ease, background .3s ease;
+}
+.site-head.is-stuck{
+  border-bottom-color:var(--rule-soft);
+  background:color-mix(in srgb, var(--ink-900) 94%, transparent);
+}
+
+.head-in{
+  width:100%; max-width:var(--shell); margin-inline:auto;
+  padding:1.05rem var(--gut);
+  display:flex; align-items:center; gap:1.5rem;
+}
+
+.head-progress{
+  position:absolute; left:0; bottom:-1px; height:1px; width:0;
+  background:var(--accent); transition:width .12s linear;
+}
+
+.wordmark{ display:inline-flex; align-items:center; gap:.62rem; margin-right:auto; }
+.wordmark__mark{ width:26px; height:26px; flex:none; }
+.wordmark__text{
+  font-size:1rem; font-weight:600; letter-spacing:-0.02em;
+}
+
+.nav ul{ display:flex; gap:1.85rem; }
+.nav a{
+  position:relative; display:block; padding-block:.25rem;
+  font-size:.83rem; font-weight:450; color:var(--fg-2);
+  transition:color .18s ease;
+}
+.nav a:hover{ color:var(--fg); }
+.nav a.is-current{ color:var(--fg); }
+.nav a.is-current::after{
+  content:""; position:absolute; left:0; right:0; bottom:-.3rem;
+  height:1px; background:var(--fg-3);
+}
+
+.menu-btn{
+  display:none; width:38px; height:38px; padding:0;
+  background:none; border:1px solid var(--rule); border-radius:3px;
+  cursor:pointer; flex-direction:column; align-items:center;
+  justify-content:center; gap:5px;
+}
+.menu-btn span{
+  display:block; width:15px; height:1px; background:var(--fg);
+  transition:transform .25s ease, opacity .25s ease;
+}
+.menu-btn[aria-expanded="true"] span:first-child{ transform:translateY(3px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:last-child{ transform:translateY(-3px) rotate(-45deg); }
+
+/* ----------------------------------------------------------- 4. Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.78rem 1.5rem;
+  font-size:.85rem; font-weight:550; letter-spacing:-0.01em;
+  background:var(--fg); color:var(--ink-900);
+  border:1px solid var(--fg); border-radius:2px;
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
+  white-space:nowrap;
+}
+.btn:hover{ background:transparent; color:var(--fg); }
+
+.btn--quiet{
+  background:transparent; color:var(--fg); border-color:var(--rule);
+}
+.btn--quiet:hover{ border-color:var(--fg); background:transparent; }
+
+.btn--sm{ padding:.55rem 1.05rem; font-size:.8rem; }
+
+/* ----------------------------------------------------------- 5. Type atoms */
+.eyebrow{
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--fg-3); margin-bottom:1.6rem;
+}
+
+.lede{ font-size:var(--t-lede); color:var(--fg-2); max-width:52ch; }
+
+.sec-head{ margin-bottom:clamp(2.5rem,4.5vw,4rem); }
+
+.sec-num{
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.14em; color:var(--fg-3);
+  padding-bottom:1.1rem; margin-bottom:1.6rem;
+  border-bottom:1px solid var(--rule);
+}
+
+.sec-title{
+  font-size:var(--t-h2); font-weight:600;
+  letter-spacing:-0.032em; line-height:1.07;
+  max-width:20ch;
+}
+
+.sec-lede{
+  margin-top:1.1rem; font-size:var(--t-lede);
+  color:var(--fg-2); max-width:56ch;
+}
+
+/* ----------------------------------------------------------- 6. Hero */
+.hero{ padding-top:clamp(7rem,14vw,11rem); padding-bottom:var(--sec-y); }
+
+.hero__title{
+  font-size:var(--t-hero); font-weight:600;
+  letter-spacing:-0.042em; line-height:1.01;
+  margin-bottom:clamp(2.2rem,4vw,3rem);
+  max-width:18ch;
+}
+
+.hero__lower{
+  display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1fr);
+  gap:clamp(2rem,5vw,4.5rem); align-items:end;
+  margin-bottom:clamp(3.5rem,7vw,6rem);
+}
+
+/* the single accent moment in the hero */
+.hero__title .u{
+  position:relative; white-space:nowrap;
+}
+.hero__title .u::after{
+  content:""; position:absolute; left:0; right:0; bottom:.06em;
+  height:2px; background:var(--accent);
+}
+
+.hero__actions{ display:flex; flex-wrap:wrap; gap:.7rem; margin-top:2.2rem; }
+
+.hero__fig{ margin:0; }
+.hero__fig figcaption{
+  margin-top:1.1rem; font-family:var(--mono);
+  font-size:var(--t-mono); letter-spacing:.08em;
+  color:var(--fg-3); text-align:right;
+}
+
+/* ----------------------------------------------------------- 7. Drawings */
+.drawing{ width:100%; height:auto; color:var(--fg-3); }
+
+.d-grid path{ stroke:var(--rule-soft); stroke-width:1; fill:none; }
+.d-hair{ stroke:var(--fg-3); stroke-width:1.1; fill:none; }
+.d-solid{ stroke:var(--fg); stroke-width:1.9; fill:none; }
+.d-phone{ stroke:var(--fg); stroke-width:1.9; fill:var(--ink-800); }
+.d-dot{ fill:var(--fg); stroke:none; }
+.d-dim{ stroke:var(--fg-3); stroke-width:1; fill:none; }
+.d-leader path{ stroke:var(--rule); stroke-width:1; fill:none; }
+.d-tick path{ stroke:var(--rule); stroke-width:1; fill:none; }
+
+/* accent appears here, functionally: it marks the moving part */
+.d-accent{ stroke:var(--accent); stroke-width:1.6; fill:none; }
+.d-ghost path{ stroke:var(--fg-3); stroke-width:1; stroke-dasharray:2 5; fill:none; opacity:.6; }
+
+.d-label{
+  font-family:var(--mono); font-size:12px;
+  letter-spacing:.04em; fill:var(--fg-2);
+}
+.d-label--accent{ fill:var(--accent); }
+.d-num{ font-family:var(--mono); font-size:11px; fill:var(--fg-3); letter-spacing:.1em; }
+.d-cap{ font-family:var(--sans); font-size:13px; font-weight:500; fill:var(--fg); }
+
+/* ----------------------------------------------------------- 8. Figures row */
+.figures{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--rule);
+}
+.figures > div{
+  padding:1.5rem 1.25rem 0 0;
+  border-right:1px solid var(--rule-soft);
+}
+.figures > div:last-child{ border-right:0; }
+.figures dt{
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.11em; text-transform:uppercase;
+  color:var(--fg-3); margin-bottom:.5rem;
+}
+.figures dd{
+  font-size:clamp(1.6rem,3vw,2.3rem); font-weight:600;
+  letter-spacing:-0.035em; line-height:1;
+}
+
+/* ----------------------------------------------------------- 9. Bands */
+.band{ padding-block:var(--sec-y); border-top:1px solid var(--rule-soft); }
+.band--alt{ background:var(--ink-850); }
+.band--end{ background:var(--ink-850); }
+
+/* ----------------------------------------------------------- 10. Thesis */
+.split{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,5rem); }
+.split__lead{ font-size:var(--t-lede); color:var(--fg-2); max-width:44ch; }
+.split__body{ display:grid; gap:2.2rem; }
+
+.thesis-item h3{
+  font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em;
+  padding-bottom:.8rem; margin-bottom:.9rem;
+  border-bottom:1px solid var(--rule);
+}
+.thesis-item p{ color:var(--fg-2); }
+
+/* ----------------------------------------------------------- 11. Definition list */
+.deflist{ border-top:1px solid var(--rule); }
+.deflist__row{
+  display:grid; grid-template-columns:minmax(200px,.42fr) 1fr;
+  gap:clamp(1rem,4vw,3rem);
+  padding-block:1.7rem;
+  border-bottom:1px solid var(--rule-soft);
+  transition:background .25s ease;
+}
+.deflist__row:hover{ background:color-mix(in srgb, var(--fg) 2.5%, transparent); }
+.deflist dt{ font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em; }
+.deflist dd{ color:var(--fg-2); max-width:62ch; }
+
+/* ----------------------------------------------------------- 12. Flow diagram */
+.flow-scroll{
+  overflow-x:auto; overflow-y:hidden;
+  margin-bottom:clamp(2.5rem,5vw,4rem);
+  padding-bottom:.5rem;
+  scrollbar-width:thin;
+}
+.flow{ min-width:900px; }
+
+.stages{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:0; border-top:1px solid var(--rule); counter-reset:stage;
+}
+.stages li{
+  counter-increment:stage;
+  padding:1.6rem 1.5rem 1.6rem 0;
+  border-bottom:1px solid var(--rule-soft);
+  border-right:1px solid var(--rule-soft);
+}
+.stages li::before{
+  content:counter(stage,decimal-leading-zero);
+  display:block; font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.12em; color:var(--fg-3); margin-bottom:.7rem;
+}
+.stages h3{ font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em; margin-bottom:.4rem; }
+.stages p{ color:var(--fg-2); font-size:.95rem; }
+
+/* ----------------------------------------------------------- 13. Spec table */
+.table-scroll{ overflow-x:auto; scrollbar-width:thin; }
+
+.spec{ width:100%; border-collapse:collapse; min-width:620px; }
+.spec thead th{
+  text-align:left; font-family:var(--mono); font-weight:500;
+  font-size:var(--t-mono); letter-spacing:.12em; text-transform:uppercase;
+  color:var(--fg-3); padding:0 1.5rem 1rem 0;
+  border-bottom:1px solid var(--rule);
+}
+.spec tbody th{
+  text-align:left; font-size:var(--t-h3); font-weight:600;
+  letter-spacing:-0.02em; padding:1.5rem 1.5rem 1.5rem 0;
+  vertical-align:top; white-space:nowrap;
+}
+.spec tbody td{
+  color:var(--fg-2); padding:1.5rem 1.5rem 1.5rem 0;
+  vertical-align:top; border-bottom:1px solid var(--rule-soft);
+}
+.spec tbody th{ border-bottom:1px solid var(--rule-soft); }
+.spec .num{
+  font-family:var(--mono); color:var(--fg-3);
+  text-align:right; padding-right:0; white-space:nowrap;
+}
+
+/* ----------------------------------------------------------- 14. Segments */
+.segments{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  border-top:1px solid var(--rule);
+}
+.segments li{
+  padding:1.8rem 1.6rem 1.8rem 0;
+  border-bottom:1px solid var(--rule-soft);
+  border-right:1px solid var(--rule-soft);
+}
+.segments__n{
+  display:block; font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.12em; color:var(--fg-3); margin-bottom:.8rem;
+}
+.segments h3{ font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em; margin-bottom:.4rem; }
+.segments p{ color:var(--fg-2); font-size:.95rem; }
+
+/* ----------------------------------------------------------- 15. Roadmap */
+.roadmap{ border-top:1px solid var(--rule); counter-reset:rm; }
+.roadmap li{
+  counter-increment:rm;
+  display:grid; grid-template-columns:auto minmax(190px,.32fr) 1fr;
+  gap:clamp(1rem,3vw,2.5rem); align-items:baseline;
+  padding-block:1.6rem;
+  border-bottom:1px solid var(--rule-soft);
+}
+.roadmap li::before{
+  content:counter(rm,decimal-leading-zero);
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.12em; color:var(--fg-3);
+}
+.roadmap h3{ font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em; }
+.roadmap p{ color:var(--fg-2); max-width:58ch; }
+
+/* ----------------------------------------------------------- 16. People */
+.people{ border-top:1px solid var(--rule); }
+.people li{ border-bottom:1px solid var(--rule-soft); }
+.people a{
+  display:grid; grid-template-columns:minmax(200px,.32fr) 1fr auto;
+  gap:clamp(1rem,3vw,2.5rem); align-items:baseline;
+  padding-block:1.6rem;
+  transition:background .25s ease, padding-inline .25s ease;
+}
+.people a:hover{
+  background:color-mix(in srgb, var(--fg) 3%, transparent);
+  padding-inline:1rem;
+}
+.people__role{
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.1em; text-transform:uppercase; color:var(--fg-3);
+}
+.people__name{ font-size:var(--t-h3); font-weight:600; letter-spacing:-0.02em; }
+.people__link{
+  font-size:.85rem; color:var(--fg-2); white-space:nowrap;
+  display:inline-flex; align-items:center; gap:.5rem;
+}
+.people__link i{ font-style:normal; transition:transform .25s ease; }
+.people a:hover .people__link{ color:var(--fg); }
+.people a:hover .people__link i{ transform:translateX(4px); }
+
+/* ----------------------------------------------------------- 17. Contact */
+.contact{ text-align:left; max-width:var(--shell); }
+.contact__title{
+  font-size:clamp(2rem,4.6vw,3.7rem); font-weight:600;
+  letter-spacing:-0.038em; line-height:1.05; margin-bottom:1.3rem;
+}
+.contact__lede{ font-size:var(--t-lede); color:var(--fg-2); max-width:48ch; }
+.contact__actions{ display:flex; flex-wrap:wrap; gap:.7rem; margin-top:2.3rem; }
+
+/* ----------------------------------------------------------- 18. Footer */
+.site-foot{
+  border-top:1px solid var(--rule);
+  padding-block:clamp(3rem,6vw,4.5rem) 2rem;
+}
+.foot-in{
+  display:grid; grid-template-columns:1.4fr 1fr;
+  gap:2.5rem; align-items:start;
+}
+.foot-brand p{
+  color:var(--fg-3); max-width:44ch; margin-top:1rem; font-size:.95rem;
+}
+.foot-nav{ display:grid; gap:.75rem; justify-items:start; }
+.foot-nav a{ color:var(--fg-2); font-size:.9rem; transition:color .18s ease; }
+.foot-nav a:hover{ color:var(--fg); }
+
+.foot-base{
+  display:flex; flex-wrap:wrap; gap:.8rem;
+  justify-content:space-between;
+  margin-top:clamp(2.5rem,5vw,4rem); padding-top:1.5rem;
+  border-top:1px solid var(--rule-soft);
+  font-family:var(--mono); font-size:var(--t-mono);
+  letter-spacing:.08em; color:var(--fg-3);
+}
+
+/* ----------------------------------------------------------- 19. Reveal */
+[data-reveal]{
+  opacity:0; transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.22,.61,.36,1),
+             transform .7s cubic-bezier(.22,.61,.36,1);
+}
+[data-reveal].is-in{ opacity:1; transform:none; }
+
+/* ----------------------------------------------------------- 20. Responsive */
+@media (max-width:1040px){
+  .hero__lower{ grid-template-columns:1fr; align-items:start; }
+  .hero__fig{ max-width:560px; }
+  .hero__fig figcaption{ text-align:left; }
+  .split{ grid-template-columns:1fr; }
+  .figures{ grid-template-columns:repeat(2,1fr); }
+  .figures > div:nth-child(2){ border-right:0; }
+  .figures > div:nth-child(n+3){ border-top:1px solid var(--rule-soft); margin-top:1.25rem; }
+}
+
+@media (max-width:860px){
+  .nav{
+    position:fixed; inset:62px 0 auto 0;
+    background:var(--ink-850); border-bottom:1px solid var(--rule);
+    clip-path:inset(0 0 100% 0);
+    transition:clip-path .32s cubic-bezier(.22,.61,.36,1);
+  }
+  .nav.is-open{ clip-path:inset(0 0 0 0); }
+  .nav ul{ flex-direction:column; gap:0; padding:.25rem var(--gut) 1.25rem; }
+  .nav li{ border-bottom:1px solid var(--rule-soft); }
+  .nav li:last-child{ border-bottom:0; }
+  .nav a{ padding-block:.95rem; font-size:.92rem; }
+  .nav a.is-current::after{ display:none; }
+  .menu-btn{ display:flex; }
+
+  .deflist__row{ grid-template-columns:1fr; gap:.5rem; }
+  .roadmap li{ grid-template-columns:auto 1fr; row-gap:.4rem; }
+  .roadmap p{ grid-column:2; }
+  .people a{ grid-template-columns:1fr; gap:.35rem; }
+  .people a:hover{ padding-inline:.75rem; }
+  .stages li,.segments li{ padding-right:1.25rem; }
+}
+
+@media (max-width:560px){
+  .btn--sm{ display:none; }
+  .figures{ grid-template-columns:1fr; }
+  .figures > div{ border-right:0; border-top:1px solid var(--rule-soft); margin-top:0; padding-block:1.1rem 0; }
+  .figures > div:first-child{ border-top:0; }
+  .foot-in{ grid-template-columns:1fr; }
+  .stages li,.segments li{ border-right:0; padding-right:0; }
+}
+
+/* ----------------------------------------------------------- 21. Motion pref */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important; animation-iteration-count:1!important;
+    transition-duration:.001ms!important; scroll-behavior:auto!important;
+  }
+  [data-reveal]{ opacity:1; transform:none; }
+}
+
+/* ----------------------------------------------------------- 22. Print */
+@media print{
+  .site-head,.hero__actions,.contact__actions,.menu-btn{ display:none; }
+  body{ background:#fff; color:#000; }
+  .band--alt,.band--end{ background:#fff; }
+}
